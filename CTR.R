@@ -10,7 +10,7 @@ ad.stats <- function(mu, v, error=5) {
   beta <- (1-mu)*v
   
   # print variance in CTR
-  cat('variance in CTR = ', variance_in_ctr <- mu*(1-mu)/v)
+  # cat('variance in CTR = ', variance_in_ctr <- mu*(1-mu)/v)
   
   # print the upper and lower bound of CTR
   # http://www.marketingdistillery.com/2015/02/08/how-to-calculate-confidence-intervals-for-conversion-rate/
@@ -22,7 +22,7 @@ ad.stats <- function(mu, v, error=5) {
   if (alpha != v) {
     ctr.upper <- qbeta(1-0.01*error/2, alpha+1, v-alpha)
   }
-  cat('CTR lies between', 100*ctr.lower, '% and', 100*ctr.upper, '% with error', error, '%')
+  cat('CTR lies between', 100*ctr.lower, '% and', 100*ctr.upper, '%\n')
   
   # plot it - only the section that 'makes sense'
   # using min(5 times the CTR or 1) - i.e. if the CTR is high enough, just plot in range [0,1]
@@ -31,6 +31,7 @@ ad.stats <- function(mu, v, error=5) {
 }
 
 # plot the CTR distribution of an ad
-ad.stats(0.0037, 2155)
+ad.stats(0.0037, 2182)
+ad.stats(0.0053, 1130)
 
 
