@@ -146,6 +146,6 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 		plt.title('Fraction of nodes in network converted')
 		plt.xlabel('Number of seed nodes chosen')
 		plt.ylabel('Fraction of target nodes converted/activated')
-		plt.savefig(name('figure'))
+		plt.savefig(name('figure-' + message))
 
 	return activated_fractions
