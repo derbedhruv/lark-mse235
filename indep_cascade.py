@@ -1,7 +1,7 @@
 from ic import *	# import independent cascade functions from https://github.com/hhchen1105/networkx_addon/blob/master/information_propagation/independent_cascade.py
 import networkx as nx
 import random, numpy
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 random.seed(252)	#repeatability
 
