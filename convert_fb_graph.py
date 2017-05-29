@@ -21,30 +21,36 @@ def normalize(d):
 		d[edge] /= normalization_factor
 
 # read im the file
-g = nx.read_edgelist('facebook_combined.txt')
+def create_file(f_input, f_output):
+	g = nx.read_edgelist(f_input)
 
-# get the degree of each node
-# this gives a dictionary mapping each node ID to its degree
-degrees = nx.degree(g)
+	# get the degree of each node
+	# this gives a dictionary mapping each node ID to its degree
+	degrees = nx.degree(g)
 
-# TRANSFORMATION
-# for all edges, convert into directed edge, going from higher degree node to lower degree,
-# and weighted by the degree of the higher one. This will be written out to a file.
-d = {}	# this dictionary maps (node1, node2) ==> weight
-for e in g.edges():
-	# convert edge to (degree, edge_id) format
-	edge = map(lambda x: (degrees[x], x), e)
-	if degrees[e[0]] > degrees[e[1]]:
-		# create an edge from higher to lower
-		d[(e[0], e[1])] = weight1(g, e[0], e[1])
+	# TRANSFORMATION
+	# for all edges, convert into directed edge, going from higher degree node to lower degree,
+	# and weighted by the degree of the higher one. This will be written out to a file.
+	d = {}	# this dictionary maps (node1, node2) ==> weight
+	for e in g.edges():
+		# convert edge to (degree, edge_id) format
+		edge = map(lambda x: (degrees[x], x), e)
+		if degrees[e[0]] >= degrees[e[1]]:
+			# create an edge from higher to lower
+			d[(e[0], e[1])] = weight1(g, e[0], e[1])
+		else:
+			d[(e[1], e[0])] = weight1(g, e[1], e[0])
 
-# normalize the dictionary		
-normalize(d)
+	# normalize the dictionary		
+	normalize(d)
 
-# write to file
-with open('fb_modified.txt', 'w+') as f:
-	for edge in d.keys():
-		s = edge[0] + ' ' + edge[1] + ' ' + str(d[edge]) + '\n'
-		f.write(s)
+	# write to file
+	with open(f_output, 'w+') as f:
+		for edge in d.keys():
+			s = edge[0] + ' ' + edge[1] + ' ' + str(d[edge]) + '\n'
+			f.write(s)
 
-print "Successfully written to fb_modified.txt!"
+	print "Successfully written to", f_output
+
+if __name__ == "__main__":
+	create_file('facebook_combined.txt', 'fb_modified.txt')
