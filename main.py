@@ -2,6 +2,8 @@ from independent_cascade import *
 from linear_threshold import *
 from util import *
 
+NUM_NODES_TO_SEED = 50	# limit to how many seed nodes we will have
+
 # we choose a 'target' audience as a circle15 for 0.circles
 # HARDCODED
 target_nodes = [108, 208, 251, 125, 325, 176, 133, 276, 198, 271, 288, 316,\
@@ -19,19 +21,26 @@ if __name__ == "__main__":
 	# read in facebook graph, modified with weights
 	g = graph_from_file('facebook_combined.txt')
 
+	# print helpful stats
+	print 'There are', len(g.nodes()), 'nodes in the graph'
+	print 'There are', len(target_nodes), 'target nodes'
+
+	# create set of g.nodes() - target_nodes
+	non_target_nodes = list(set(g.nodes()) - set(target_nodes))
+
 	# EXPERIMENT 1
 	# Find how many seed nodes are required before you get any of the target nodes activated
-	fraction_activated(seed_set=g.nodes(), f=independent_cascade, g=g, message='experiment 1', target_nodes=target_nodes, savefig=True)
+	fraction_activated(seed_set=non_target_nodes, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment1', target_nodes=target_nodes, savefig=True)
 
 	# EXPERIMENT 2
 	# find how many seed nodes are needed from the target group itself 
 	# before the whole target group gets converted
-	fraction_activated(seed_set=target_nodes, f=independent_cascade, g=g, message='experiment 2', target_nodes=target_nodes, savefig=True)
+	fraction_activated(seed_set=target_nodes, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment2', target_nodes=target_nodes, savefig=True)
 
 	# EXPERIMENT 3
 	# expt 1, but with the linear_threshold algo
-	fraction_activated(seed_set=g.nodes(), f=linear_threshold, g=g, message='experiment 3', target_nodes=target_nodes, savefig=True)
+	fraction_activated(seed_set=non_target_nodes, f=linear_threshold, g=g, M_end=NUM_NODES_TO_SEED, message='experiment3', target_nodes=target_nodes, savefig=True)
 
 	# EXPERIMENT 4
 	# expt 2, but with the linear_threshold algo
-	fraction_activated(seed_set=target_nodes, f=linear_threshold, g=g, message='experiment 4', target_nodes=target_nodes, savefig=True)
+	fraction_activated(seed_set=target_nodes, f=linear_threshold, g=g, M_end=NUM_NODES_TO_SEED, message='experiment4', target_nodes=target_nodes, savefig=True)
