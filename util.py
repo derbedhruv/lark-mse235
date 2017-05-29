@@ -2,6 +2,8 @@
 	USEFUL I/O and GRAPH FUNCTIONS USED BY MAIN PROGRAM
 '''
 import networkx as nx
+import random, numpy
+random.seed(252)	#repeatability
 
 # weight generation functions
 def weight1(g, n1, n2):
@@ -22,7 +24,7 @@ def normalize(d):
 		d[edge] /= normalization_factor
 
 # read im the file
-def create_file(f_input, f_output):
+def create_file(f_input, f_output=None, toFile=True):
 	g = nx.read_edgelist(f_input)
 
 	# get the degree of each node
@@ -45,13 +47,15 @@ def create_file(f_input, f_output):
 	# normalize the dictionary		
 	normalize(d)
 
-	# write to file
-	with open(f_output, 'w+') as f:
-		for edge in d.keys():
-			s = edge[0] + ' ' + edge[1] + ' ' + str(d[edge]) + '\n'
-			f.write(s)
+	if toFile:
+		# write to file
+		with open(f_output, 'w+') as f:
+			for edge in d.keys():
+				s = edge[0] + ' ' + edge[1] + ' ' + str(d[edge]) + '\n'
+				f.write(s)
 
-	print "Successfully written to", f_output
+		print "Successfully written to", f_output
+	return d
 
 def read_graph(filename):
 	# reads weighted edge list from file, returns graph
@@ -69,7 +73,23 @@ def read_graph(filename):
 
 	return g
 
-def fraction_activated(seed_set, f, g, message=None, M_end=None, M_start=1, target_nodes=target_nodes):
+def graph_from_file(filename):
+	"""
+	Combination of create_file() and read_graph()
+	Reads the edge list representation of a graph
+	and returns the directed graph with edgeweights calculated
+	as proportional to the difference between the degree of the two nodes
+	"""
+	d = create_file(f_input=filename, toFile=False)
+	edges = [(int(e[0]), int(e[1]), float(d[e])) for e in d]
+
+	# create new graph, read in weighted edges from list of tuples
+	g = nx.DiGraph()		# VERY IMPORTANT!! MUST BE READ IN AS A DIRECTED GRPAH!
+	g.add_weighted_edges_from(edges)
+	return g
+
+
+def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M_start=1):
 	"""
 	seed_set : list or g.nodes() from which to select the seed nodes at random
 	f : the diffusion function that is used to be called
@@ -98,6 +118,6 @@ def fraction_activated(seed_set, f, g, message=None, M_end=None, M_start=1, targ
 		activated_fractions.append(activated_fraction)
 
 		# print the current iteration and activated fraction
-		print N, seed_nodes, ':', activated_fraction, ':', activated_nodes
+		print N, ':', activated_fraction, '\t:', seed_nodes
 
 	return activated_fractions
