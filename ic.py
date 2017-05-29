@@ -72,11 +72,11 @@ def independent_cascade(G, seeds, steps=0):
 
   # init activation probabilities
   for e in DG.edges():
-    if 'act_prob' not in DG[e[0]][e[1]]:
-      DG[e[0]][e[1]]['act_prob'] = 0.1
-    elif DG[e[0]][e[1]]['act_prob'] > 1:
+    if 'weight' not in DG[e[0]][e[1]]:
+      DG[e[0]][e[1]]['weight'] = 0.1
+    elif DG[e[0]][e[1]]['weight'] > 1:
       raise Exception("edge activation probability:", \
-          DG[e[0]][e[1]]['act_prob'], "cannot be larger than 1")
+          DG[e[0]][e[1]]['weight'], "cannot be larger than 1")
 
   # perform diffusion
   A = copy.deepcopy(seeds)  # prevent side effect
@@ -130,6 +130,6 @@ def _diffuse_one_round(G, A, tried_edges):
   return A, activated_nodes_of_this_round, cur_tried_edges
 
 def _prop_success(G, src, dest):
-  return random.random() <= G[src][dest]['act_prob']
+  return random.random() <= G[src][dest]['weight']
 
 
