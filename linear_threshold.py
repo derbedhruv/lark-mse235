@@ -31,8 +31,6 @@ def linear_threshold(g, seeds, threshold={}):
     if threshold == {}:
         for n in g.nodes():
             threshold[n] = np.random.uniform()
-
-    print threshold
     
     # add seeds in infected
     infected = set([s for s in seeds])
