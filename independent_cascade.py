@@ -1,14 +1,11 @@
 """
 Implement independent cascade model
 SOURCE: https://github.com/hhchen1105/networkx_addon/blob/master/information_propagation/independent_cascade.py
+
+ORIGINAL AUTHOR: Hung-Hsuan Chen <hhchen@psu.edu>
+
+MODIFIED BY: Raunak Rewari, Dhruv Joshi (Stanford University)
 """
-#!/usr/bin/env python
-#    Copyright (C) 2004-2010 by
-#    Hung-Hsuan Chen <hhchen@psu.edu>
-#    All rights reserved.
-#    BSD license.
-#    NetworkX:http://networkx.lanl.gov/.
-__author__ = """Hung-Hsuan Chen (hhchen@psu.edu)"""
 
 import copy
 import networkx as nx
