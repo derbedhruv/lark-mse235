@@ -13,7 +13,7 @@ def read_graph(filename):
 
 	# convert to list of tuples
 	edges = edges.split('\n')
-	edges = [tuple(e.split()) for e in edges]
+	edges = [tuple(map(float, e.split())) for e in edges]
 
 	# create new graph, read in weighted edges from list of tuples
 	g = nx.Graph()
