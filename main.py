@@ -26,7 +26,7 @@ if __name__ == "__main__":
 	# EXPERIMENT 2
 	# find how many seed nodes are needed from the target group itself 
 	# before the whole target group gets converted
-	fraction_activated(seed_set=target_nodes, f=independent_cascade, g=g, message='experiment 2', target_nodes=target_nodes)
+	fraction_activated(seed_set=target_nodes, f=independent_cascade, g=g, message='experiment 2', target_nodes=target_nodes, savefig=True)
 
 	# EXPERIMENT 3
 	# expt 1, but with the linear_threshold algo
@@ -34,4 +34,4 @@ if __name__ == "__main__":
 
 	# EXPERIMENT 4
 	# expt 2, but with the linear_threshold algo
-	fraction_activated(seed_set=target_nodes, f=linear_threshold, g=g, message='experiment 4', target_nodes=target_nodes)
+	fraction_activated(seed_set=target_nodes, f=linear_threshold, g=g, message='experiment 4', target_nodes=target_nodes, savefig=True)
