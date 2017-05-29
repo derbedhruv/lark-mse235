@@ -14,7 +14,7 @@ import random
 import networkx as nx
 random.seed(88)
     
-def linearThreshold(g, seeds, threshold={}):
+def linear_threshold(g, seeds, threshold={}):
     """
     g : graph
     seeds : a list of seed nodes

@@ -2,8 +2,19 @@
 	USEFUL I/O and GRAPH FUNCTIONS USED BY MAIN PROGRAM
 '''
 import networkx as nx
-import random, numpy
+import random, numpy, datetime
 random.seed(252)	#repeatability
+
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')   # http://stackoverflow.com/questions/29217543/why-does-this-solve-the-no-display-environment-issue-with-matplotlib
+import matplotlib.pyplot as plt
+
+def name(prefix):
+	# returns a filename of the format 
+	# 'prefix-YYYY-MM-DD-HH-MM-SS'
+	now = datetime.datetime.now()
+	return prefix + "-" + str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "-" + str(now.hour) + "-" + str(now.minute)
 
 # weight generation functions
 def weight1(g, n1, n2):
@@ -89,7 +100,7 @@ def graph_from_file(filename):
 	return g
 
 
-def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M_start=1):
+def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M_start=1, savefig=False):
 	"""
 	seed_set : list or g.nodes() from which to select the seed nodes at random
 	f : the diffusion function that is used to be called
@@ -103,9 +114,13 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 	"""
 	print message
 
+	x_val = []
+	y_val = []
+
 	activated_fractions = []
 	if M_end == None:
 		M_end = len(seed_set)
+
 	for N in range(M_start, M_end):
 		# step 1: choose N random nodes from all possible nodes
 		seed_nodes = list(numpy.random.choice(seed_set, size=N, replace=False))
@@ -118,6 +133,19 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 		activated_fractions.append(activated_fraction)
 
 		# print the current iteration and activated fraction
-		print N, ':', activated_fraction, '\t:', seed_nodes
+		print N, ':', round(activated_fraction, 2), '\t:', seed_nodes
+
+		# update variables for plotting
+		x_val.append(N)
+		y_val.append(activated_fraction)
+
+	if savefig:
+		# save figure locally
+		plt.figure(0)
+		plt.plot(x_val, y_val)
+		plt.title('Fraction of nodes in network converted')
+		plt.xlabel('Number of seed nodes chosen')
+		plt.ylabel('Fraction of target nodes converted/activated')
+		plt.savefig(name('figure'))
 
 	return activated_fractions
