@@ -95,7 +95,7 @@ def _diffuse_all(G, A):
     (A, activated_nodes_of_this_round, cur_tried_edges) = \
         _diffuse_one_round(G, A, tried_edges)
     layer_i_nodes.append(activated_nodes_of_this_round)
-    tried_edges = tried_edges.union(cur_tried_edges)
+    # tried_edges = tried_edges.union(cur_tried_edges)
     if len(A) == len_old:
       break
   return layer_i_nodes
@@ -124,12 +124,14 @@ def _diffuse_one_round(G, A, tried_edges):
         continue
       if _prop_success(G, s, nb):
         activated_nodes_of_this_round.add(nb)
-      cur_tried_edges.add((s, nb))
+      # cur_tried_edges.add((s, nb))
   activated_nodes_of_this_round = list(activated_nodes_of_this_round)
   A.extend(activated_nodes_of_this_round)
   return A, activated_nodes_of_this_round, cur_tried_edges
 
 def _prop_success(G, src, dest):
-  return random.random() <= G[src][dest]['weight']
+  r = random.random()
+  # print r, G[src][dest]['weight']
+  return r <= G[src][dest]['weight']
 
 
