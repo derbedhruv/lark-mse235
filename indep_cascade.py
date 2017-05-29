@@ -6,16 +6,20 @@ import random, numpy
 random.seed(252)	#repeatability
 
 # create new graph object, read in from file
-with open('fb_modified.txt', 'r') as f:
-	edges = f.read()
+def read_graph(filename):
+	# reads weighted edge list from file, returns graph
+	with open(filename, 'r') as f:
+		edges = f.read()
 
-# convert to list of tuples
-edges = edges.split('\n')
-edges = [tuple(e.split()) for e in edges]
+	# convert to list of tuples
+	edges = edges.split('\n')
+	edges = [tuple(e.split()) for e in edges]
 
-# create new graph, read in weighted edges from list of tuples
-g = nx.Graph()
-g.add_weighted_edges_from(edges)
+	# create new graph, read in weighted edges from list of tuples
+	g = nx.Graph()
+	g.add_weighted_edges_from(edges)
+
+	return g
 
 # we choose a 'target' audience as a circle15 for 0.circles
 # HARDCODED
@@ -47,15 +51,22 @@ def fraction_activated(seed_set, f, message=None, M_end=None, M_start=1, g=g, ta
 		activated_nodes = independent_cascade(g, seed_nodes)
 
 		# step 3: find fraction of target nodes which have been activated
-		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(seed_set)
+		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(target_nodes)
 		activated_fractions.append(activated_fraction)
 
 		# print the current iteration and activated fraction
-		print N, ':', activated_fraction
+		print N, seed_nodes, ':', activated_fraction, ':', activated_nodes
 
 	return activated_fractions
 
+def make_graph():
+	g = nx.Graph()
+	G.add_weighted_edges_from([(1,2,0.4)])
+
 if __name__ == "__main__":
+	# read in graph
+	g = read_graph('fb_modified.txt')
+
 	# EXPERIMENT 1
 	# Find how many seed nodes are required before you get any of the target nodes activated
 	fraction_activated(seed_set=g.nodes(), f=independent_cascade, message='experiment 1')
