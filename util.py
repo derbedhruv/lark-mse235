@@ -68,3 +68,36 @@ def read_graph(filename):
 	g.add_weighted_edges_from(edges)
 
 	return g
+
+def fraction_activated(seed_set, f, g, message=None, M_end=None, M_start=1, target_nodes=target_nodes):
+	"""
+	seed_set : list or g.nodes() from which to select the seed nodes at random
+	f : the diffusion function that is used to be called
+	g : (required) the graph over which to run the independent cascade
+	message : (optional) debugging message to print.
+	M_end : (optional) the number of possible seed nodes to loop over. default the length of seed_set
+	M_start : (optional) the starting point to loop over. 
+	target_nodes : (required) the target nodes for checking activation as a list of fractions of nodes activated. default target_nodes
+
+	returns the list of fractions of nodes activated at each iteration.
+	"""
+	print message
+
+	activated_fractions = []
+	if M_end == None:
+		M_end = len(seed_set)
+	for N in range(M_start, M_end):
+		# step 1: choose N random nodes from all possible nodes
+		seed_nodes = list(numpy.random.choice(seed_set, size=N, replace=False))
+
+		# step 2: calculate independent cascade
+		activated_nodes = f(g, seed_nodes)
+
+		# step 3: find fraction of target nodes which have been activated
+		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(target_nodes)
+		activated_fractions.append(activated_fraction)
+
+		# print the current iteration and activated fraction
+		print N, seed_nodes, ':', activated_fraction, ':', activated_nodes
+
+	return activated_fractions
