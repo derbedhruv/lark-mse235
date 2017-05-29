@@ -36,6 +36,7 @@ def linearThreshold(g, seeds, threshold={}):
     
     # add seeds in infected
     infected = set([s for s in seeds])
+    activated = [list(infected)]
            
     ''' Epidemics spreading '''
     toSpread = True
@@ -48,12 +49,14 @@ def linearThreshold(g, seeds, threshold={}):
                 # add n to toInfect eventually
                 if f > threshold[n]:
                     toInfect.add(n)
-        
+
         ''' check convergence  '''
         if len(toInfect) > 0: # add infected node to infected set
             infected = infected.union(toInfect)
+            activated.append(list(toInfect))
+
         else: # there no more nodes to infect
             toSpread = False
         
     #return 
-    return list(infected)
+    return activated
