@@ -127,6 +127,7 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 
 		# step 2: calculate independent cascade
 		activated_nodes = f(g, seed_nodes)
+		vizualize_graph(g, activated_nodes)
 
 		# step 3: find fraction of target nodes which have been activated
 		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(target_nodes)
@@ -149,3 +150,17 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 		plt.savefig(name('figure-' + message))
 
 	return activated_fractions
+
+def get_stats(g,nodes):
+	print g.degree(nodes).values()
+
+def vizualize_graph(g, activated_nodes):
+	# nx.write_dot(g, "data.dot")
+	# sfdp - x - Goverlap = scale - Tpng data.dot > data.png
+	A = nx.to_agraph(g)
+	A.node_attr['shape'] = 'point'
+	all_nodes = [x for y in activated_nodes for x in y]
+	for i in all_nodes:
+		A.add_node(" ", color='red')
+	# A.layout()  # layout with default (neato)
+	A.draw(str(len(all_nodes)) + '_nodes.png', prog='sfdp', args='-x -Goverlap=scale -Tpng')

@@ -25,7 +25,7 @@ def linear_threshold(g, seeds, threshold={}):
     def _infected_neighbour_fraction(n, infected):
         # returns the fraction of neighbours of node 'n' which are infected
         neighbours = g.neighbors(n)
-        if neighbours > 0:
+        if len(neighbours) > 0:
             return sum([1 for nv in neighbours if nv in infected])/float(len(neighbours))
         return 0
 
