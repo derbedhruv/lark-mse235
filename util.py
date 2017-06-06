@@ -235,14 +235,13 @@ def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 
 	# run ffmpeg command?
 	# fps 24
-	import subprocess
+	import subprocess, os
 	ffmpeg_command = 'ffmpeg -f image2 -r 24 -i ' + file_name + '_%d.png -vcodec mpeg4 -y ' + file_name + '.mp4'
-	process = subprocess.Popen(ffmpeg_command.split(), stdout=subprocess.PIPE)
+	process = subprocess.Popen(ffmpeg_command.split(), stdout=subprocess.PIPE, cwd=os.path.dirname(os.path.realpath(__file__)) )
 	# output, error = process.communicate()
 	print 'created', file_name, '.mp4'
 
 	# delete the files just created?
-	import os
 	for i,_ in enumerate(activation_series):
 		os.remove(file_name + '_' + str(i) + '.png')
 	print 'cleaned up'

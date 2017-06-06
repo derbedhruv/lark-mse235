@@ -34,7 +34,8 @@ raunaq_target_nodes = ['896', '902', '914', '915', '921', '940', '947', '952', '
 
 if __name__ == "__main__":
 	# read in facebook graph, modified with weights
-	g, node_positions = graph_from_file('facebook_combined.txt')
+	# g, node_positions = graph_from_file('facebook_combined.txt')
+	g, node_positions = graph_from_file('testgraph.txt')
 
 	# print helpful stats
 	print 'There are', len(g.nodes()), 'nodes in the graph'
@@ -45,7 +46,7 @@ if __name__ == "__main__":
 
 	# EXPERIMENT 1
 	# Find how many seed nodes are required before you get any of the target nodes activated (random seed)
-	fraction_activated(seed_set=non_target_nodes, seed_func=random_seed, node_positions=node_positions, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment1', target_nodes=target_nodes, savefig=True, visualize=True)
+	# fraction_activated(seed_set=non_target_nodes, seed_func=random_seed, node_positions=node_positions, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment1', target_nodes=target_nodes, savefig=True, visualize=True)
 
 	# EXPERIMENT 2
 	# find how many seed nodes are needed from the target group itself 
@@ -62,10 +63,10 @@ if __name__ == "__main__":
 
 	# expt 5
 	# use the degree distribution seed to find the right seeds
-	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment1', target_nodes=target_nodes, savefig=True, visualize=True)
+	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment5', target_nodes=target_nodes, savefig=True, visualize=True)
 
 	# expt 6
-	
+	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=linear_threshold, g=g, M_end=NUM_NODES_TO_SEED, message='experiment6', target_nodes=target_nodes, savefig=True, visualize=True)
 
 
 
