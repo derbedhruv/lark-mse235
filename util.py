@@ -154,13 +154,37 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 def get_stats(g,nodes):
 	print g.degree(nodes).values()
 
-def vizualize_graph(g, activated_nodes):
-	# nx.write_dot(g, "data.dot")
-	# sfdp - x - Goverlap = scale - Tpng data.dot > data.png
-	A = nx.to_agraph(g)
-	A.node_attr['shape'] = 'point'
-	all_nodes = [x for y in activated_nodes for x in y]
-	for i in all_nodes:
-		A.add_node(" ", color='red')
-	# A.layout()  # layout with default (neato)
-	A.draw(str(len(all_nodes)) + '_nodes.png', prog='sfdp', args='-x -Goverlap=scale -Tpng')
+def sample_graph():
+	'''
+	DEBUGGING FUNCTION
+	create a simple networkx graph for debugging
+	'''
+	g = nx.Graph()
+	for i in range(20):
+	  g.add_node(i)
+
+	for i in range(20):
+	  g.add_edge(i, 2)
+
+	return g
+
+def visualize_graph(g, activated_nodes=[], file_name=None):
+	"""
+	Visualizes a graph, with the activated nodes as red, and un-activated as blue
+	edges are a light shade of grey
+
+	g - networkx graph object
+	activated_nodes - a list of nodes IDs which have been 'activated'
+	file_name - the name of the file to save to
+	"""
+	plt.figure()
+	# first create a list with the colours of nodes
+	node_colors = ['r' if node in activated_nodes else '0.5' for node in g.nodes()]
+
+	# nx.draw(g, with_labels=False, node_size=25, node_color='b', node_shape='o', linewidths=0.1, width=0.1, edge_color='0.4')
+	nx.draw(g, nodelist=g.nodes(), with_labels=False, node_size=25, node_color=node_colors, node_shape='o', linewidths=0.3, width=0.1, edge_color='0.4')
+
+	if file_name:
+		# save to file
+		plt.title('Node activation')
+		plt.savefig(file_name)
