@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-DIRECTORY = "/Users/Raunaq/Downloads/facebook"
+DIRECTORY = "facebook"
 
 def select_circle():
 	max_nodes = 0
@@ -63,3 +63,4 @@ def get_relevant_nodes(filename, relevant_feats_idxs, best_row):
 
 relevant_idxs, best_row = select_circle()
 relevant_nodes = get_relevant_nodes("107.feat", relevant_idxs, best_row)
+print relevant_nodes
