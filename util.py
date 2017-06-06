@@ -213,8 +213,6 @@ def visualize_graph(g, activated_nodes=[], target_nodes=[], file_name=None, mess
 
 	return plt
 
-
-
 def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 	"""
 	Visualize the evolution of a graph and save to a file (GIF?)
