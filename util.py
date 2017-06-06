@@ -168,7 +168,7 @@ def sample_graph():
 
 	return g
 
-def visualize_graph(g, activated_nodes=[], file_name=None):
+def visualize_graph(g, activated_nodes=[], target_nodes=[], file_name=None, message=''):
 	"""
 	Visualizes a graph, with the activated nodes as red, and un-activated as blue
 	edges are a light shade of grey
@@ -179,12 +179,12 @@ def visualize_graph(g, activated_nodes=[], file_name=None):
 	"""
 	plt.figure()
 	# first create a list with the colours of nodes
-	node_colors = ['r' if node in activated_nodes else '0.5' for node in g.nodes()]
+	node_colors = ['r' if node in activated_nodes else 'b' if node in target_nodes else '0.5' for node in g.nodes()]
 
 	# nx.draw(g, with_labels=False, node_size=25, node_color='b', node_shape='o', linewidths=0.1, width=0.1, edge_color='0.4')
-	nx.draw(g, nodelist=g.nodes(), with_labels=False, node_size=25, node_color=node_colors, node_shape='o', linewidths=0.3, width=0.1, edge_color='0.4')
+	nx.draw(g, with_labels=False, node_size=25, node_color=node_colors, node_shape='o', linewidths=0.3, width=0.1, edge_color='0.4')
 
 	if file_name:
 		# save to file
-		plt.title('Node activation')
+		plt.title('Node activation ' + message)
 		plt.savefig(file_name)
