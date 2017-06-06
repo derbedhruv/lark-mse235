@@ -38,6 +38,9 @@ def normalize(d):
 def create_file(f_input, f_output=None, toFile=True):
 	g = nx.read_edgelist(f_input)
 
+	# pre-calculate node positions
+	node_positions = nx.spring_layout(g)
+
 	# get the degree of each node
 	# this gives a dictionary mapping each node ID to its degree
 	degrees = nx.degree(g)
@@ -66,7 +69,7 @@ def create_file(f_input, f_output=None, toFile=True):
 				f.write(s)
 
 		print "Successfully written to", f_output
-	return d
+	return d, node_positions
 
 def read_graph(filename):
 	# reads weighted edge list from file, returns graph
@@ -91,16 +94,16 @@ def graph_from_file(filename):
 	and returns the directed graph with edgeweights calculated
 	as proportional to the difference between the degree of the two nodes
 	"""
-	d = create_file(f_input=filename, toFile=False)
-	edges = [(int(e[0]), int(e[1]), float(d[e])) for e in d]
+	d, node_positions = create_file(f_input=filename, toFile=False)
+	edges = [(e[0], e[1], float(d[e])) for e in d]
 
 	# create new graph, read in weighted edges from list of tuples
 	g = nx.DiGraph()		# VERY IMPORTANT!! MUST BE READ IN AS A DIRECTED GRPAH!
 	g.add_weighted_edges_from(edges)
-	return g
+	return g, node_positions
 
 
-def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M_start=1, savefig=False):
+def fraction_activated(seed_set, f, g, target_nodes, node_positions, message=None, M_end=None, M_start=1, savefig=False):
 	"""
 	seed_set : list or g.nodes() from which to select the seed nodes at random
 	f : the diffusion function that is used to be called
@@ -127,7 +130,9 @@ def fraction_activated(seed_set, f, g, target_nodes, message=None, M_end=None, M
 
 		# step 2: calculate independent cascade
 		activated_nodes = f(g, seed_nodes)
-		vizualize_graph(g, activated_nodes)
+
+		# vizualize_graph(g, activated_nodes)
+		visualize_evolution(g, target_nodes=target_nodes, file_name=message, activation_series=activated_nodes, pos=node_positions)
 
 		# step 3: find fraction of target nodes which have been activated
 		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(target_nodes)
@@ -187,4 +192,44 @@ def visualize_graph(g, activated_nodes=[], target_nodes=[], file_name=None, mess
 	if file_name:
 		# save to file
 		plt.title('Node activation ' + message)
-		plt.savefig(file_name)
+		plt.savefig(file_name + '_' + message)
+
+	return plt
+
+def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
+	"""
+	Visualize the evolution of a graph and save to a file (GIF?)
+	Given a graph 'g', and a list of lists 'activation_series',
+	which describes the activated nodes by stage,
+	this function saves a file 'file_name.mp4' 
+	"""
+	active_nodes = []
+	for i, activated_nodes in enumerate(activation_series):
+		print 'visualizing step', i
+		# create a plt object of each activation_series
+		plt.figure()
+		active_nodes.append(activated_nodes)
+		node_colors = ['r' if node in active_nodes else 'b' if node in target_nodes else '0.5' for node in g.nodes()]
+		node_size = [25 if x != '0.5' else 1 for x in node_colors ]
+		nx.draw(g, pos=pos, with_labels=False, node_size=node_size, node_color=node_colors, node_shape='o', linewidths=0.3, width=0.1, edge_color='0.4')
+
+		plt.savefig(file_name + '_' + str(i) + '.png')
+		plt.close()	# prevent the plts from consuming too much memory
+
+	# run ffmpeg command?
+	# fps 24, 
+	import subprocess
+	ffmpeg_command = 'ffmpeg -f image2 -r 24 -i ' + file_name + '_%d.png -vcodec mpeg4 -y ' + file_name + '.mp4'
+	process = subprocess.Popen(ffmpeg_command.split(), stdout=subprocess.PIPE)
+	# output, error = process.communicate()
+	print 'created', file_name, '.mp4'
+
+	# delete the files just created?
+	import os
+	for i,_ in enumerate(activation_series):
+		os.remove(file_name + '_' + str(i) + '.png')
+	print 'cleaned up'
+
+
+
+
