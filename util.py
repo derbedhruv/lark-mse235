@@ -102,10 +102,27 @@ def graph_from_file(filename):
 	g.add_weighted_edges_from(edges)
 	return g, node_positions
 
+def random_seed(seed_set, N):
+	# returns a randomly selected set of size N
+	# from the seed_set
+	return list(numpy.random.choice(seed_set, size=N, replace=False))
 
-def fraction_activated(seed_set, f, g, target_nodes, node_positions, message=None, M_end=None, M_start=1, savefig=False):
+def degree_seed(seed_set, N):
+	# returns the top N nodes sorted by degree
+	return 
+
+def best_seed(seed_set, N):
+	# returns the top N best seeds, sorted by the 
+	# size of the set of the set of activated nodes
+	# that it generates
+	# pre-calculate the size of the nodes and just return the top
+	# N sorted
+	return
+
+def fraction_activated(seed_set, seed_func, f, g, target_nodes, node_positions, message=None, M_end=None, M_start=1, savefig=False, visualize=False):
 	"""
 	seed_set : list or g.nodes() from which to select the seed nodes at random
+	seed_func : A function which is used to select a set of seed nodes from the seed_set
 	f : the diffusion function that is used to be called
 	g : (required) the graph over which to run the independent cascade
 	message : (optional) debugging message to print.
@@ -126,13 +143,13 @@ def fraction_activated(seed_set, f, g, target_nodes, node_positions, message=Non
 
 	for N in range(M_start, M_end):
 		# step 1: choose N random nodes from all possible nodes
-		seed_nodes = list(numpy.random.choice(seed_set, size=N, replace=False))
+		seed_nodes = seed_func(seed_set, N)
 
 		# step 2: calculate independent cascade
 		activated_nodes = f(g, seed_nodes)
 
-		# vizualize_graph(g, activated_nodes)
-		visualize_evolution(g, target_nodes=target_nodes, file_name=message, activation_series=activated_nodes, pos=node_positions)
+		if visualize:
+			visualize_evolution(g, target_nodes=target_nodes, file_name=message, activation_series=activated_nodes, pos=node_positions)
 
 		# step 3: find fraction of target nodes which have been activated
 		activated_fraction = float(len(set([x for y in activated_nodes for x in y]).intersection(target_nodes)))/len(target_nodes)
@@ -196,6 +213,8 @@ def visualize_graph(g, activated_nodes=[], target_nodes=[], file_name=None, mess
 
 	return plt
 
+
+
 def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 	"""
 	Visualize the evolution of a graph and save to a file (GIF?)
@@ -217,7 +236,7 @@ def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 		plt.close()	# prevent the plts from consuming too much memory
 
 	# run ffmpeg command?
-	# fps 24, 
+	# fps 24
 	import subprocess
 	ffmpeg_command = 'ffmpeg -f image2 -r 24 -i ' + file_name + '_%d.png -vcodec mpeg4 -y ' + file_name + '.mp4'
 	process = subprocess.Popen(ffmpeg_command.split(), stdout=subprocess.PIPE)
