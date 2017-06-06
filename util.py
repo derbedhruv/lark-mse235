@@ -102,16 +102,16 @@ def graph_from_file(filename):
 	g.add_weighted_edges_from(edges)
 	return g, node_positions
 
-def random_seed(seed_set, N):
+def random_seed(seed_set, N, g):
 	# returns a randomly selected set of size N
 	# from the seed_set
 	return list(numpy.random.choice(seed_set, size=N, replace=False))
 
-def degree_seed(seed_set, N):
+def degree_seed(seed_set, N, g):
 	# returns the top N nodes sorted by degree
-	return sorted(g.nodes(), key=lambda x: g.degree(x), reverse=True)[:N]
+	return sorted(seed_set, key=lambda x: g.degree(x), reverse=True)[:N]
 
-def best_seed(seed_set, N):
+def best_seed(seed_set, N, g):
 	# returns the top N best seeds, sorted by the 
 	# size of the set of the set of activated nodes
 	# that it generates
@@ -143,7 +143,7 @@ def fraction_activated(seed_set, seed_func, f, g, target_nodes, node_positions, 
 
 	for N in range(M_start, M_end):
 		# step 1: choose N random nodes from all possible nodes
-		seed_nodes = seed_func(seed_set, N)
+		seed_nodes = seed_func(seed_set, N, g)
 
 		# step 2: calculate independent cascade
 		activated_nodes = f(g, seed_nodes)
