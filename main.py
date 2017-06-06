@@ -34,8 +34,7 @@ raunaq_target_nodes = ['896', '902', '914', '915', '921', '940', '947', '952', '
 
 if __name__ == "__main__":
 	# read in facebook graph, modified with weights
-	# g, node_positions = graph_from_file('facebook_combined.txt')
-	g, node_positions = graph_from_file('testgraph.txt')
+	g, node_positions = graph_from_file('facebook_combined.txt')
 
 	# print helpful stats
 	print 'There are', len(g.nodes()), 'nodes in the graph'
