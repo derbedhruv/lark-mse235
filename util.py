@@ -224,17 +224,18 @@ def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 	for i, activated_nodes in enumerate(activation_series):
 		print 'visualizing step', i
 		# create a plt object of each activation_series
-		# plt.figure()
+		plt.figure()
 		active_nodes += activated_nodes
 		node_colors = ['r' if node in active_nodes else 'b' if node in target_nodes else '0.5' for node in g.nodes()]
 		node_size = [25 if x != '0.5' else 1 for x in node_colors ]
 		nx.draw(g, pos=pos, node_size=node_size, node_color=node_colors, node_shape='o', linewidths=0.3, width=0.1, edge_color='0.4')
 
 		plt.savefig(file_name + '_' + str(i) + '.png')
-		# plt.close()	# prevent the plts from consuming too much memory
+		plt.close()	# prevent the plts from consuming too much memory
 
 	# run ffmpeg command?
 	# fps 24
+	'''
 	import subprocess, os
 	ffmpeg_command = 'ffmpeg -f image2 -r 24 -i ' + file_name + '_%d.png -vcodec mpeg4 -y ' + file_name + '.mp4'
 	process = subprocess.Popen(ffmpeg_command.split(), stdout=subprocess.PIPE, cwd=os.path.dirname(os.path.realpath(__file__)) )
@@ -245,6 +246,7 @@ def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 	for i,_ in enumerate(activation_series):
 		os.remove(file_name + '_' + str(i) + '.png')
 	print 'cleaned up'
+	'''
 
 def greedy_nodes(g, f, exclude=[], N=10):
 	# recursively find the top N nodes which give the highest number of activated nodes
