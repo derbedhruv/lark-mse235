@@ -16,7 +16,7 @@ random.seed(88)
     
 def linear_threshold(g, seeds, threshold={}):
     """
-    g : graph
+    g : directed graph
     seeds : a list of seed nodes
 
     returns a list of lists of activated nodes by step
@@ -26,7 +26,7 @@ def linear_threshold(g, seeds, threshold={}):
         # returns the fraction of neighbours of node 'n' which are infected
         neighbours = g.neighbors(n)
         if len(neighbours) > 0:
-            return sum([1 for nv in neighbours if nv in infected])/float(len(neighbours))
+            return sum([1. for nv in neighbours if nv in infected])/len(neighbours)
         return 0
 
     # set threshold
