@@ -260,13 +260,15 @@ def greedy_nodes(g, f, exclude=[], N=10):
 	max_activated_nodes = 0		# start at 0
 
 	cache = {}
+	cache[()] = []
 
 	for seed_node in set(g.nodes()) - set(exclude):
-		if cache.has_key():
-			activated_nodes = cache[tuple(exclude + [seed_node])]
+		if cache.has_key((seed_node)):
+			activated_nodes = cache[(seed_node)]
 		else:
-			activated_nodes = f(g, exclude + [seed_node])
-			cache[tuple(exclude + [seed_node])] = activated_nodes
+			activated_nodes = f(g, [seed_node])
+			cache[(seed_node)] = activated_nodes
+		activated_nodes = set(activated_nodes).union(cache[exclude])
 		activated_nodes = [x for y in activated_nodes for x in y]
 
 		if len(activated_nodes) > max_activated_nodes:
