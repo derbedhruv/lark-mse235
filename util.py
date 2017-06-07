@@ -108,8 +108,8 @@ def random_seed(seed_set, N, g):
 	return list(numpy.random.choice(seed_set, size=N, replace=False))
 
 def degree_seed(seed_set, N, g):
-	# returns the top N nodes sorted by degree
-	return sorted(seed_set, key=lambda x: g.degree(x), reverse=True)[:N]
+	# returns the bottom N nodes sorted by degree in ascending order
+	return sorted(seed_set, key=lambda x: g.degree(x))[:N]
 
 def best_seed(seed_set, N, g):
 	# returns the top N best seeds, sorted by the 
