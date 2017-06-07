@@ -246,6 +246,29 @@ def visualize_evolution(g, target_nodes, file_name, activation_series, pos):
 		os.remove(file_name + '_' + str(i) + '.png')
 	print 'cleaned up'
 
+def greedy_nodes(g, f, exclude=[], N=10):
+	# recursively find the top N nodes which give the highest number of activated nodes
+	# using the funcion 'f' on graph 'g'
+	# print 'finding highest activation for all nodes using' + f.__name__
+	# base case
+	if len(exclude) == N:
+		return exclude		# return the set of nodes found
 
+	current_best = 0	# current seed which gives the highest no of activated nodes
+	max_activated_nodes = 0		# start at 0
+
+	for seed_node in set(g.nodes()) - set(exclude):
+		activated_nodes = f(g, exclude + [seed_node])
+		activated_nodes = [x for y in activated_nodes for x in y]
+
+		if len(activated_nodes) > max_activated_nodes:
+			max_activated_nodes = len(activated_nodes)
+			current_best = seed_node
+
+	# once its over, you've found the best
+	print current_best, ':', max_activated_nodes, 'nodes activated'
+
+	# recursively call the function, with current_best added to the set to exclude from
+	return greedy_nodes(g=g, f=f, exclude=exclude+[current_best], N=N)
 
 
