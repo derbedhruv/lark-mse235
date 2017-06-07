@@ -119,7 +119,7 @@ def best_seed(seed_set, N, g):
 	# N sorted
 	return
 
-def fraction_activated(seed_set, seed_func, f, g, target_nodes, node_positions, message=None, M_end=None, M_start=1, savefig=False, visualize=False):
+def fraction_activated(seed_set, seed_func, f, g, target_nodes, node_positions, message=None, M_step=1, M_end=None, M_start=1, savefig=False, visualize=False):
 	"""
 	seed_set : list or g.nodes() from which to select the seed nodes at random
 	seed_func : A function which is used to select a set of seed nodes from the seed_set
@@ -141,7 +141,7 @@ def fraction_activated(seed_set, seed_func, f, g, target_nodes, node_positions, 
 	if M_end == None:
 		M_end = len(seed_set)
 
-	for N in range(M_start, M_end):
+	for N in range(M_start, M_end, M_step):
 		# step 1: choose N random nodes from all possible nodes
 		seed_nodes = seed_func(seed_set, N, g)
 

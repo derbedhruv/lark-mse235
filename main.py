@@ -62,10 +62,10 @@ if __name__ == "__main__":
 
 	# expt 5
 	# use the degree distribution seed to find the right seeds
-	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=independent_cascade, g=g, M_end=NUM_NODES_TO_SEED, message='experiment5', target_nodes=raunaq_target_nodes, savefig=True)
+	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=independent_cascade, g=g, M_step=100, M_end=1000, M_start=100, message='experiment5', target_nodes=raunaq_target_nodes, savefig=True)
 
 	# expt 6
-	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=linear_threshold, g=g, M_end=NUM_NODES_TO_SEED, message='experiment6', target_nodes=raunaq_target_nodes, savefig=True)
+	fraction_activated(seed_set=non_target_nodes, seed_func=degree_seed, node_positions=node_positions, f=linear_threshold, g=g, M_step=100, M_end=1000, M_start=100, message='experiment6', target_nodes=raunaq_target_nodes, savefig=True)
 
 
 
